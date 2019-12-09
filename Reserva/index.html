@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Reserva vuelo</title>
+    <script>
+        addEventListener("load", function () {
+            let boton = document.getElementById("enviar");
+            boton.addEventListener("click", clickEnvio);
+        });
+
+        function clickEnvio() {
+            let req
+            if (window.XMLHttpRequest) {
+                req = new XMLHttpRequest();
+            } else if (window.ActiveXObject) {
+                req = ActiveXObject("Microsoft.XMLHTTP");
+            }
+
+            req.onreadystatechange = function () {
+                if (req.readyState == 4) {
+                    if (req.status == 200) {
+                        let plazas = document.getElementById("plazas");
+                        plazas.textContent = req.responseText;
+                    }
+                }
+            }
+
+            req.open("POST", "servidor.php");
+            let dni = document.getElementById("dni");
+            let nombre = document.getElementById("nombre");
+            req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            req.send("dni=" + dni.value + "&nombre=" + nombre.value);
+        }
+    </script>
+</head>
+
+<body>
+    <form method="POST">
+        <fieldset>
+            <legend>Reserva vuelo</legend>
+            <label for="nombre">Nombre </label><input type="text" name="nombre" id="nombre"><br>
+            <label for="apellidos">Apellidos </label><input type="text" name="apellidos" id="apellidos"><br>
+            <label for="email">Email </label><input type="text" name="email" id="email"><br>
+            <label for="dni">DNI </label><input type="text" name="dni" id="dni"><br>
+        </fieldset>
+    </form>
+    <button id="enviar">Enviar</button>
+    <div id="plazas"></div>
+</body>
+
+</html>
