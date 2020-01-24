@@ -68,6 +68,8 @@ addEventListener("load", function () {
         console.log("Altura:");
         console.log(cuadrado.alto());
         console.log("**********");
+        console.log(cuadrado.perimetro());
+        console.log("**********");
         console.log(cuadrado);
         console.log("**********");
     }
