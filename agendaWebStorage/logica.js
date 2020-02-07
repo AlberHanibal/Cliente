@@ -1,12 +1,17 @@
 function botonGuardarClick() {
-    pintarContacto();
-}
-
-function pintarContacto() {
     let nombre = document.getElementById("nombre").value;
     let email = document.getElementById("email").value;
     let telefono = document.getElementById("telefono").value;
+    let objContacto = {
+        nombre: nombre, email: email, telefono: telefono
+    };
+    localStorage.setItem(nombre, JSON.stringify(objContacto));
+    console.log(JSON.parse(localStorage.getItem(nombre)));
+    pintarContacto(nombre, email, telefono);
+}
 
+function pintarContacto(nombre, email, telefono) {
+    
     divExterior = document.createElement("DIV");
     document.getElementById("lista").appendChild(divExterior); // div es hijo de lista
 
@@ -75,4 +80,11 @@ function informacionClick() {
 document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("guardar").addEventListener("click", botonGuardarClick);
     document.getElementById("informacion").addEventListener("click", informacionClick);
+    console.log(localStorage.length);
+    for (var i = 0; i < localStorage.length; i++) {
+        console.log(localStorage.getItem(localStorage.key(i)));
+        let objContacto = JSON.parse(localStorage.getItem(localStorage.key(i)));
+        console.log(objContacto);
+    }
+    /* pintarContacto(nombre, email, telefono); */
 })
