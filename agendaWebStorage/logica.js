@@ -2,11 +2,15 @@ function botonGuardarClick() {
     let nombre = document.getElementById("nombre").value;
     let email = document.getElementById("email").value;
     let telefono = document.getElementById("telefono").value;
+    let arrayContacto = JSON.parse(localStorage.getItem("contactos"));
+    if (arrayContacto == null) {
+        arrayContacto = [];
+    }
     let objContacto = {
         nombre: nombre, email: email, telefono: telefono
     };
-    localStorage.setItem(nombre, JSON.stringify(objContacto));
-    console.log(JSON.parse(localStorage.getItem(nombre)));
+    arrayContacto.push(objContacto);
+    localStorage.setItem("contactos", JSON.stringify(arrayContacto));
     pintarContacto(nombre, email, telefono);
 }
 
@@ -46,7 +50,7 @@ function liClick() {
 }
 
 function modificarClick() {
-    var arrayInfoAntigua = this.previousSibling.textContent.split(" ");
+    arrayInfoAntigua = this.previousSibling.textContent.split(" ");
     this.previousSibling.setAttribute("id", "modificando");
     document.getElementById("nombre").value = arrayInfoAntigua[0];
     document.getElementById("email").value = arrayInfoAntigua[1];
@@ -62,8 +66,25 @@ function eliminarClick() {
 }
 
 function modificarContactoClick() {
+    // no esta el modificiar ni el borrado
     arrayInfoNueva = [document.getElementById("nombre").value, document.getElementById("email").value,
     document.getElementById("telefono").value];
+    let arrayContacto = JSON.parse(localStorage.getItem("contactos"));
+    console.log(arrayContacto[0].nombre);
+    if (arrayContacto != null) { 
+        i = 0;
+        let encontrado = false;
+        while (i < arrayContacto.length || encontrado) {
+            if (arrayInfoAntigua[0] == arrayContacto[i].nombre) {
+                arrayContacto[i].nombre = arrayInfoAntigua[0]
+                arrayContacto[i].email = arrayInfoAntigua[1]
+                arrayContacto[i].telefono = arrayInfoAntigua[2]
+                encontrado = true;
+            }
+            i++;
+        }
+        localStorage.setItem("contactos", JSON.stringify(arrayContacto));
+    }
     infoAntigua = document.getElementById("modificando");
     infoAntigua.innerHTML = arrayInfoNueva[0] + " " + "<span>" + arrayInfoNueva[1] + " " + arrayInfoNueva[2] + "</span>";
 
@@ -80,11 +101,13 @@ function informacionClick() {
 document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("guardar").addEventListener("click", botonGuardarClick);
     document.getElementById("informacion").addEventListener("click", informacionClick);
-    console.log(localStorage.length);
-    for (var i = 0; i < localStorage.length; i++) {
-        console.log(localStorage.getItem(localStorage.key(i)));
-        let objContacto = JSON.parse(localStorage.getItem(localStorage.key(i)));
-        console.log(objContacto);
+    let arrayContacto = JSON.parse(localStorage.getItem("contactos"));
+    console.log(arrayContacto);
+
+    if (arrayContacto != null) {
+        for (const contacto of arrayContacto) {
+            pintarContacto(contacto.nombre, contacto.email, contacto.telefono);
+        }
     }
-    /* pintarContacto(nombre, email, telefono); */
+    
 })
