@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script>
+        var o = {};
+        o.id = 0;
+        console.log(o.id);
+        //*******con flecha
+        function dameId(exito) {
+            setTimeout(()=> {
+                let i = Math.floor(Math.random() * 100);
+                exito(i);
+            }, 2000);
+        }
+        dameId((id) => {
+            o.id = id;
+            console.log(o.id);
+        });
+
+        let promesaId = new Promise(function (exito, fracaso) {
+            setTimeout(() => {
+                let i = Math.floor(Math.random() * 100);
+                exito(i);
+            }, 2000);
+        });
+
+        promesaId.then((id)=> {
+            o.id = id;
+            console.log(o.id);
+        });
+
+    </script>
+</head>
+
+<body>
+    hola
+</body>
+
+</html>

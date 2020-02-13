@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Agenda</title>
+    <link rel="stylesheet" href="estilos.css">
+    <script src="logica.js"></script>
+</head>
+<body>
+    <h1>Tu agenda</h1>
+    <form>
+        <input type="text" name="nombre" id="nombre" placeholder="Nombre y Apellidos"><br>
+        <input type="text" name="email" id="email" placeholder="Email"><br>
+        <input type="text" name="telefono" id="telefono" placeholder="Teléfono"><br>
+        <input type="button" value="Guardar" id="guardar">
+        <input type="reset" value="Borrar">
+    </form>
+    <div id="contenido">
+        <h2>Tus contactos</h2>
+        <span>Clica en un contacto para más información, es posible cerrar la ventana de información.</span>
+        <ul id="lista">
+        </ul>
+    </div>
+    
+    <div id="informacion">
+    </div>
+</body>
+</html>

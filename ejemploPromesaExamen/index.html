@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script>
+        function hazAjax(url) {
+            return new Promise((exito) => {
+                let req;
+                if (window.XMLHttpRequest) {
+                    req = new XMLHttpRequest();
+                } else if (window.ActiveXObject) {
+                    req = ActiveXObject("Microsoft.XMLHTTP");
+                }
+                req.onreadystatechange = function () {
+                    if (req.readyState == 4) {
+                        if (req.status == 200) {
+                            exito(req);
+                        }
+                    }
+                }
+                req.open("GET", url);
+                req.send();
+            });
+        }
+
+        let respuesta = hazAjax("servidor.php");
+        respuesta.then(function () {
+            console.log("Ha llegado la respuesta");
+        });
+    </script>
+</head>
+
+<body>
+    hola
+</body>
+
+</html>
