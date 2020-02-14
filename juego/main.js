@@ -2,6 +2,7 @@ var rectangulos = [];
 var anchoRectangulos = 20;
 var altoRectangulos = 20;
 var velocidadRectangulos = 6;
+var tiempoCreacionRectangulos = 500;
 var ladoTriangulo = 20;
 var velocidadTriangulo = 10;
 var puntuacion = 0;
@@ -66,7 +67,7 @@ function animacion() {
         let x = (Math.random() * ancho_rectangulo) + 1;
         let r = new Rectangulo(x, 0, anchoRectangulos, altoRectangulos, "black");
         rectangulos.push(r);
-    }, 500);
+    }, tiempoCreacionRectangulos);
     setInterval(function () {
         limpiar();
         triangulo.dibujar(contexto);
@@ -77,9 +78,28 @@ function animacion() {
                 rectangulos.splice(i, i + 1);
                 puntuacion++;
             }
+            if (colision(rectangulos[i])) {
+                rectangulos.splice(i, i + 1);
+            }
             rectangulos[i].dibujar(contexto);
         }
     }, 60)
+}
+
+function colision(rect) {
+    let trianguloV1X = triangulo.verticeSupX - triangulo.lado / 2;
+    let trianguloV1Y = triangulo.verticeSupY + triangulo.alto;
+    let trianguloV2X = triangulo.verticeSupX + triangulo.lado / 2;
+    let trianguloV2Y = triangulo.verticeSupY + triangulo.alto;
+    if (intersects(triangulo.verticeSupX, triangulo.verticeSupY, trianguloV1X, trianguloV1Y
+        , rect.x, rect.y + rect.alto, rect.x + rect.ancho, rect.y + rect.alto)) {
+        return true;
+    }
+    if (intersects(triangulo.verticeSupX, triangulo.verticeSupY, trianguloV2X, trianguloV2Y
+        , rect.x, rect.y + rect.alto, rect.x + rect.ancho, rect.y + rect.alto)) {
+        return true;
+    }
+    return false;
 }
 
 function moverTriangulo(event) {
@@ -88,8 +108,19 @@ function moverTriangulo(event) {
     } else if (event.keyCode == 39) {
         triangulo.mover(velocidadTriangulo, "dcha");
     }
-    
 }
+
+function intersects(a, b, c, d, p, q, r, s) {
+    var det, gamma, lambda;
+    det = (c - a) * (s - q) - (r - p) * (d - b);
+    if (det === 0) {
+        return false;
+    } else {
+        lambda = ((s - q) * (r - a) + (p - r) * (s - b)) / det;
+        gamma = ((b - d) * (r - a) + (c - a) * (s - b)) / det;
+        return (0 < lambda && lambda < 1) && (0 < gamma && gamma < 1);
+    }
+};
 
 function inicializar() {
     canvas = document.getElementById("micanvas");
