@@ -7,6 +7,7 @@ var ladoTriangulo = 20;
 var velocidadTriangulo = 10;
 var puntuacion = 0;
 
+
 addEventListener("load", inicializar);
 
 class Rectangulo {
@@ -16,6 +17,7 @@ class Rectangulo {
         this.ancho = ancho;
         this.alto = alto;
         this.color = color
+        this.borrar = false;
     }
 
     dibujar(contexto) {
@@ -72,6 +74,35 @@ function animacion() {
         limpiar();
         triangulo.dibujar(contexto);
         triangulo.mover(contexto);
+        rectangulos.map(rect=> {
+            rect.mover(velocidadRectangulos);
+        })
+        for (const rectangulo of rectangulos) {
+            if (rectangulo.y > alto_rectangulo + altoRectangulos) {
+                rectangulo.borrar = true;
+                puntuacion++;
+            }
+            if (colision(rectangulo)) {
+                rectangulo.borrar = true;
+                // quitar vidas
+            }
+        }
+        rectangulos.map(rect=> {
+            if (rect.borrar === true) {
+                let pos = rectangulos.map(rectBorrar=> {
+                    return rectBorrar.borrar;
+                }).indexOf(true);
+                rectangulos.splice(pos, pos + 1);
+            }
+        });
+        rectangulos.map(rect=> {
+            rect.dibujar(contexto);
+        })
+    }, 60);
+    /* setInterval(function () {
+        limpiar();
+        triangulo.dibujar(contexto);
+        triangulo.mover(contexto);
         for (let i = 0; i < rectangulos.length; i++) {
             rectangulos[i].mover(velocidadRectangulos);
             if (rectangulos[i].y > alto_rectangulo + altoRectangulos) {
@@ -83,7 +114,7 @@ function animacion() {
             }
             rectangulos[i].dibujar(contexto);
         }
-    }, 60)
+    }, 60); */
 }
 
 function colision(rect) {
