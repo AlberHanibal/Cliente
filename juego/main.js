@@ -87,14 +87,17 @@ function animacion() {
                 // quitar vidas
             }
         }
-        rectangulos.map(rect=> {
+        rectangulos = rectangulos.filter(rect=> {
+            return rect.borrar === false;
+        });
+        /* rectangulos.map(rect=> {
             if (rect.borrar === true) {
                 let pos = rectangulos.map(rectBorrar=> {
                     return rectBorrar.borrar;
                 }).indexOf(true);
                 rectangulos.splice(pos, pos + 1);
             }
-        });
+        }); */
         rectangulos.map(rect=> {
             rect.dibujar(contexto);
         })
