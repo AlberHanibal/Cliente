@@ -1,12 +1,12 @@
 var rectangulos = [];
+// configuracion partida
 var anchoRectangulos = 20;
 var altoRectangulos = 20;
-var velocidadRectangulos = 6;
-var tiempoCreacionRectangulos = 500;
+var velocidadRectangulos = 10;
+var tiempoCreacionRectangulos = 200;
 var ladoTriangulo = 20;
 var velocidadTriangulo = 10;
 var puntuacion = 0;
-
 
 addEventListener("load", inicializar);
 
@@ -37,6 +37,7 @@ class Triangulo {
         this.verticeSupX = verticeSupX;
         this.verticeSupY = verticeSupY;
         this.color = color;
+        this.vidas = 5;
     }
 
     dibujar(contexto) {
@@ -65,72 +66,72 @@ function limpiar() {
 }
 
 function animacion() {
+    // creacion rectangulos
     setInterval(function () {
         let x = (Math.random() * ancho_rectangulo) + 1;
         let r = new Rectangulo(x, 0, anchoRectangulos, altoRectangulos, "black");
         rectangulos.push(r);
     }, tiempoCreacionRectangulos);
+    // animacion
     setInterval(function () {
         limpiar();
         triangulo.dibujar(contexto);
-        triangulo.mover(contexto);
-        rectangulos.map(rect=> {
+        rectangulos.map(rect => {
             rect.mover(velocidadRectangulos);
         })
         for (const rectangulo of rectangulos) {
+            // se sale del canvas
             if (rectangulo.y > alto_rectangulo + altoRectangulos) {
                 rectangulo.borrar = true;
-                puntuacion++;
+                if (triangulo.vidas > 0) {
+                    puntuacion++;
+                }
             }
             if (colision(rectangulo)) {
                 rectangulo.borrar = true;
-                // quitar vidas
+                $('#vida' + triangulo.vidas).remove();
+                triangulo.vidas--;
             }
         }
-        rectangulos = rectangulos.filter(rect=> {
+        // borrar los rectangulos que se salgan o hayan colisionado
+        rectangulos = rectangulos.filter(rect => {
             return rect.borrar === false;
         });
-        /* rectangulos.map(rect=> {
-            if (rect.borrar === true) {
-                let pos = rectangulos.map(rectBorrar=> {
-                    return rectBorrar.borrar;
-                }).indexOf(true);
-                rectangulos.splice(pos, pos + 1);
-            }
-        }); */
-        rectangulos.map(rect=> {
+        rectangulos.map(rect => {
             rect.dibujar(contexto);
-        })
-    }, 60);
-    /* setInterval(function () {
-        limpiar();
-        triangulo.dibujar(contexto);
-        triangulo.mover(contexto);
-        for (let i = 0; i < rectangulos.length; i++) {
-            rectangulos[i].mover(velocidadRectangulos);
-            if (rectangulos[i].y > alto_rectangulo + altoRectangulos) {
-                rectangulos.splice(i, i + 1);
-                puntuacion++;
-            }
-            if (colision(rectangulos[i])) {
-                rectangulos.splice(i, i + 1);
-            }
-            rectangulos[i].dibujar(contexto);
+        });
+        $('#puntuacion').text(puntuacion);
+        if (triangulo.vidas <= 0) {
+            $('#micanvas').remove();
         }
-    }, 60); */
+    }, 60);
 }
 
 function colision(rect) {
+    // vertices base triangulo
     let trianguloV1X = triangulo.verticeSupX - triangulo.lado / 2;
     let trianguloV1Y = triangulo.verticeSupY + triangulo.alto;
     let trianguloV2X = triangulo.verticeSupX + triangulo.lado / 2;
     let trianguloV2Y = triangulo.verticeSupY + triangulo.alto;
+
+    // base cuadrado con lateral izq triangulo
     if (intersects(triangulo.verticeSupX, triangulo.verticeSupY, trianguloV1X, trianguloV1Y
         , rect.x, rect.y + rect.alto, rect.x + rect.ancho, rect.y + rect.alto)) {
         return true;
     }
+    // base cuadrado con lateral dcho triangulo
     if (intersects(triangulo.verticeSupX, triangulo.verticeSupY, trianguloV2X, trianguloV2Y
         , rect.x, rect.y + rect.alto, rect.x + rect.ancho, rect.y + rect.alto)) {
+        return true;
+    }
+    // lateral dcho triangulo con lateral izq cuadrado
+    if (intersects(triangulo.verticeSupX, triangulo.verticeSupY, trianguloV2X, trianguloV2Y
+        , rect.x, rect.y, rect.x, rect.y + rect.alto)) {
+        return true;
+    }
+    // lateral izq triangulo con lateral dcho cuadrado
+    if (intersects(triangulo.verticeSupX, triangulo.verticeSupY, trianguloV1X, trianguloV1Y
+        , rect.x + rect.ancho, rect.y, rect.x + rect.ancho, rect.y + rect.alto)) {
         return true;
     }
     return false;
@@ -144,6 +145,7 @@ function moverTriangulo(event) {
     }
 }
 
+// interseccion entre 2 segmentos, la magia
 function intersects(a, b, c, d, p, q, r, s) {
     var det, gamma, lambda;
     det = (c - a) * (s - q) - (r - p) * (d - b);
@@ -164,5 +166,4 @@ function inicializar() {
     triangulo = new Triangulo(ladoTriangulo, ancho_rectangulo / 2, alto_rectangulo - ladoTriangulo * 2, "blue");
     addEventListener("keydown", moverTriangulo);
     animacion();
-
 }

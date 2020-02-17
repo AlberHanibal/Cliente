@@ -1,14 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="estilo.css">
     <script src="main.js"></script>
+
 </head>
+
 <body>
     <h1>Jueguito</h1>
     <canvas id="micanvas" width="360" height="500"></canvas>
+    <div id="info">
+        <div>Puntuación: <span id="puntuacion">0</span> puntos.</div>
+        <div id="vidas">
+            <i id="vida1" class="fa fa-heart"></i>
+            <i id="vida2" class="fa fa-heart"></i>
+            <i id="vida3" class="fa fa-heart"></i>
+            <i id="vida4" class="fa fa-heart"></i>
+            <i id="vida5" class="fa fa-heart"></i>
+        </div>
+    </div>
 </body>
+
 </html>

@@ -1,3 +1,9 @@
-h1 {
-    
+#info {
+    position: absolute;
+    left: 400px;
+    top: 100px;
+}
+
+i {
+    color: red;
 }
